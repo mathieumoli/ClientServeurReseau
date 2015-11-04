@@ -16,6 +16,7 @@ public class Serveur {
         try {
             serverSocket = new ServerSocket(numPort);
             clientSocket = serverSocket.accept();
+            System.out.println("Nous sommes co");
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         } catch (IOException IOE) {

@@ -3,8 +3,7 @@
  */
 public class main {
     public static void main(String[] args){
-
-        int i;
-        System.out.println("hello");
+        Serveur serv = new Serveur();
+        serv.launch();
     }
 }
