@@ -19,9 +19,16 @@ public class Serveur {
             System.out.println("Nous sommes co");
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            out.write("je suis le serveur");
+            out.newLine();
+            out.flush();
         } catch (IOException IOE) {
             System.err.println(IOE);
         }
+    }
 
+    public static void main(String[] args) {
+        Serveur serveur = new Serveur();
+        serveur.launch();
     }
 }
