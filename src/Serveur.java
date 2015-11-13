@@ -1,3 +1,7 @@
+import Command.*;
+import Data.ChartDataBase;
+import Utils.*;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,15 +20,25 @@ public class Serveur {
     private BufferedReader in;
     private BufferedWriter out;
     private HashMap<String,List<String>> mapSurnom=new HashMap<String,List<String>>();
-    private static final int numPort = 6969;
+    private List<Command> allCommands;
+    private Parser parser;
+    private ChartDataBase datas;
+
+    public Serveur() {
+        this.allCommands = new ArrayList<>();
+        allCommands.add(new ViewCommand());
+        allCommands.add(new AddCommand());
+        allCommands.add(new QuitCommand());
+        parser = new Parser();
+        datas = new ChartDataBase();
+    }
 
     public void launch(){
         try {
             String messageClient="init";
             String messageEnvoye;
-            serverSocket = new ServerSocket(numPort);
+            serverSocket = new ServerSocket(Utils.numPort);
             clientSocket = serverSocket.accept();
-            System.out.println("Nous sommes co");
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
@@ -43,6 +57,12 @@ public class Serveur {
                 messageClient=in.readLine();
             }
             System.out.println(messageClient);
+            /*boolean finished = false;
+            while (! finished){
+                messageClient = in.readLine();
+                Command commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
+                finished = traiterCommande(commandReq);
+            }*/
 
             out.write("Hasta La Vista Baby !\n***** Déconnexion *****");
             out.newLine();
@@ -54,6 +74,24 @@ public class Serveur {
         }
     }
 
+    private boolean traiterCommande(Command cmd){
+        Command usableCommand = getUsableCommand(cmd);
+        System.out.println(usableCommand);
+        System.out.println(cmd);
+        if(usableCommand == null) {
+            //throw exception comme quoi le commande n'est pas présente
+        }
+        //faudrait analyser le reste de la requete
+        return usableCommand.use(datas);
+    }
+
+    private Command getUsableCommand(Command cmd){
+        for(Command c : allCommands){;
+           if(c.hasSameCommandWord(cmd))
+               return c;
+        }
+        return null;
+    }
 
     private String traiterRequeteClient(String message){
         String result="";

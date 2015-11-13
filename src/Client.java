@@ -1,3 +1,5 @@
+import Utils.Utils;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -14,7 +16,7 @@ public class Client {
     public Client() {
         try {
             String messageEnvoye="";
-            this.nameSocket = new Socket("localhost", 6969);
+            this.nameSocket = new Socket("localhost", Utils.numPort);
             in = new BufferedReader(new InputStreamReader(nameSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(nameSocket.getOutputStream()));
             Scanner sc = new Scanner(System.in);
