@@ -46,7 +46,7 @@ public class Serveur {
             out.write("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
             out.newLine();
             out.flush();
-
+            /*
             //fermeture de la socket
             messageClient=in.readLine();
             while(!(messageClient.equals("QUIT"))){
@@ -56,17 +56,21 @@ public class Serveur {
                 out.flush();
                 messageClient=in.readLine();
             }
-            System.out.println(messageClient);
-            /*boolean finished = false;
-            String answer = "";
+            System.out.println(messageClient);*/
+            boolean finished = false;
+            StringBuffer answer;
             while (! finished){
+                answer = new StringBuffer();
                 messageClient = in.readLine();
                 Command commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
-                finished = traiterCommande(commandReq,answer, parser);
-                out.write(answer);
+                System.out.println("arguments : " + commandReq.getArguments());
+                finished = traiterCommande(commandReq, answer, parser);
+                System.out.println("reponse :" + answer);
+                out.write(answer.toString());
                 out.newLine();
                 out.flush();
-            }*/
+                datas.printDatas();
+            }
 
             out.write("Hasta La Vista Baby !\n***** Déconnexion *****");
             out.newLine();
@@ -78,11 +82,12 @@ public class Serveur {
         }
     }
 
-    private boolean traiterCommande(Command cmd, String answer, Parser parser){
+    private boolean traiterCommande(Command cmd, StringBuffer answer, Parser parser){
         Command usableCommand = getUsableCommand(cmd);
         if(usableCommand == null) {
             //throw exception comme quoi le commande n'est pas présente
         }
+        System.out.println("arguments : " + cmd.getArguments());
         usableCommand.setArguments(cmd.getArguments());
         return usableCommand.use(datas, answer, parser);
     }
@@ -167,8 +172,6 @@ public class Serveur {
 
     public static void main(String[] args) {
         Serveur serveur = new Serveur();
-        //serveur.launch();
-        serveur.traiterCommande(new AddCommand("ADD", "nom"), "", serveur.parser);
-        serveur.datas.printDatas();
+        serveur.launch();
     }
 }

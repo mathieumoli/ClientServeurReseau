@@ -1,9 +1,6 @@
 package Data;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by user on 13/11/15.
@@ -17,6 +14,24 @@ public class ChartDataBase {
 
     public HashMap<String, HashSet<String>> getMapNicknames() {
         return mapNicknames;
+    }
+
+    public void addName(String name){
+        mapNicknames.put(name, new HashSet<>());
+    }
+
+    public boolean alreadyKnown(String name) {
+        return mapNicknames.containsKey(name);
+    }
+
+    public void addNickname(String name, String nickname){
+        mapNicknames.get(name).add(nickname);
+    }
+
+    public void addListOfNicknames(String name, List<String> allNicknames){
+        for(String nickname : allNicknames){
+            mapNicknames.get(name).add(nickname);
+        }
     }
 
     public void printDatas(){

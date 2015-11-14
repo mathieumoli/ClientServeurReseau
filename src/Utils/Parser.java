@@ -2,7 +2,9 @@ package Utils;
 
 import Command.Command;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,17 +20,14 @@ public class Parser {
      */
     public Command getCommand(String req){
         if(!req.endsWith(";"))
-            return new Command("","");
+            return new Command("",new ArrayList<>());
         else
             req = req.substring(0, req.length() - 1);
 
-        List<String> lStrReq = Arrays.asList(req.split(":"));
+        List<String> lStrReq = new LinkedList<String>(Arrays.asList(req.split(":")));
         String firstWord = lStrReq.get(0);
-        String args = "";
-        for(String str : lStrReq){
-            args += args;
-        }
-        return new Command(firstWord, args);
+        lStrReq.remove(0);
+        return new Command(firstWord, lStrReq);
     }
 
 
@@ -39,6 +38,21 @@ public class Parser {
      * @return The List contains one element at least
      */
     public List<String> getParsedListByToken(String str, String token){
+        if(str == null) return new ArrayList<>();
         return Arrays.asList(str.split(token));
+    }
+
+    public String getCommandResult(boolean noError, Command cmd, List<String> text){
+        String result = "";
+        result = (noError == true) ? "OK" : "ERR";
+        result += ":" + cmd.getCommandWord();
+        if(text.size() != 0)
+            result += ":";
+        for(int i = 0 ; i < text.size() ; ++i){
+            result += text.get(i);
+            if(i != text.size() - 1)
+                result += "$";
+        }
+        return result += ";";
     }
 }

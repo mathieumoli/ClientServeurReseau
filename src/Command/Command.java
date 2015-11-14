@@ -3,15 +3,17 @@ package Command;
 import Data.ChartDataBase;
 import Utils.Parser;
 
+import java.util.List;
+
 /**
  * Created by user on 13/11/15.
  */
 public class Command {
     private String commandWord;
 
-    private String arguments;
+    private List<String> arguments;
 
-    public Command(String commandWord, String arguments) {
+    public Command(String commandWord, List<String> arguments) {
         this.commandWord = commandWord;
         this.arguments = arguments;
     }
@@ -24,15 +26,15 @@ public class Command {
         return commandWord;
     }
 
-    public boolean use(ChartDataBase data, String answer, Parser parser){
+    public boolean use(ChartDataBase data, StringBuffer answer, Parser parser){
         return false;
     }
 
-    public void setArguments(String args){
+    public void setArguments(List<String> args){
         this.arguments = args;
     }
 
-    public String getArguments() {
+    public List<String> getArguments() {
         return arguments;
     }
 }

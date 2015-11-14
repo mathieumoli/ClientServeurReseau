@@ -13,35 +13,30 @@ import java.util.List;
 public class AddCommand extends Command {
 
     public AddCommand(){
-        super("ADD","");
-    }
-
-    public AddCommand(String commandWord, String arguments) {
-        super(commandWord, arguments);
+        super("ADD",new ArrayList<>());
     }
 
     @Override
-    public boolean use(ChartDataBase data, String answer, Parser parser){
-        System.out.println("Je fais un add");
-        //On parse les arguments
-        List<String> nameAndNicknames = parser.getParsedListByToken(this.getArguments(), ":");
-        String name = nameAndNicknames.get(0);
+    public boolean use(ChartDataBase data, StringBuffer answer, Parser parser){
+        List<String> allAnswers = new ArrayList<>();
+
+        String name = this.getArguments().get(0);
         //si il est déjà existant
-        if(data.getMapNicknames().containsKey(name)){
-            answer = "Nom deja connu";
-            return false;
+        if(data.alreadyKnown(name)){
+            if(this.getArguments().size() == 1){
+                allAnswers.add("Nom deja connu");
+                answer.append(parser.getCommandResult(false, this, allAnswers));
+                return false;
+            }
+        } else {
+            data.addName(name);
         }
-        //On fait les modifications sur les Datas
-        data.getMapNicknames().put(name, new HashSet<>());
-        if(nameAndNicknames.size() == 1){
-            //ecrit result
-            return false;
+
+        if(this.getArguments().size() != 1){
+            List<String> allNicknames = parser.getParsedListByToken(this.getArguments().get(1), ",");
+            data.addListOfNicknames(name, allNicknames);
         }
-        List<String> allNicknames = parser.getParsedListByToken(nameAndNicknames.get(1), ",");
-        for(String nicknames : allNicknames){
-            data.getMapNicknames().get(name).add(nicknames);
-        }
-        //On écrit la réponse (en utilisant parser)
+        answer.append(parser.getCommandResult(true, this, new ArrayList<>()));
         return false;
     }
 }
