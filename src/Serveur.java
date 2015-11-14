@@ -58,10 +58,14 @@ public class Serveur {
             }
             System.out.println(messageClient);
             /*boolean finished = false;
+            String answer = "";
             while (! finished){
                 messageClient = in.readLine();
                 Command commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
-                finished = traiterCommande(commandReq);
+                finished = traiterCommande(commandReq,answer, parser);
+                out.write(answer);
+                out.newLine();
+                out.flush();
             }*/
 
             out.write("Hasta La Vista Baby !\n***** Déconnexion *****");
@@ -74,17 +78,20 @@ public class Serveur {
         }
     }
 
-    private boolean traiterCommande(Command cmd){
+    private boolean traiterCommande(Command cmd, String answer, Parser parser){
         Command usableCommand = getUsableCommand(cmd);
-        System.out.println(usableCommand);
-        System.out.println(cmd);
         if(usableCommand == null) {
             //throw exception comme quoi le commande n'est pas présente
         }
-        //faudrait analyser le reste de la requete
-        return usableCommand.use(datas);
+        usableCommand.setArguments(cmd.getArguments());
+        return usableCommand.use(datas, answer, parser);
     }
 
+    /**
+     * Return the usable command corresponding to the command in parameter
+     * @param cmd
+     * @return
+     */
     private Command getUsableCommand(Command cmd){
         for(Command c : allCommands){;
            if(c.hasSameCommandWord(cmd))
@@ -160,6 +167,8 @@ public class Serveur {
 
     public static void main(String[] args) {
         Serveur serveur = new Serveur();
-        serveur.launch();
+        //serveur.launch();
+        serveur.traiterCommande(new AddCommand("ADD", "nom"), "", serveur.parser);
+        serveur.datas.printDatas();
     }
 }

@@ -1,6 +1,7 @@
 package Command;
 
 import Data.ChartDataBase;
+import Utils.Parser;
 
 /**
  * Created by user on 13/11/15.
@@ -23,9 +24,15 @@ public class Command {
         return commandWord;
     }
 
-    public boolean use(ChartDataBase data){
+    public boolean use(ChartDataBase data, String answer, Parser parser){
         return false;
     }
 
+    public void setArguments(String args){
+        this.arguments = args;
+    }
 
+    public String getArguments() {
+        return arguments;
+    }
 }

@@ -1,6 +1,7 @@
 package Command;
 
 import Data.ChartDataBase;
+import Utils.Parser;
 
 /**
  * Created by user on 13/11/15.
@@ -16,7 +17,7 @@ public class ViewCommand extends Command{
     }
 
     @Override
-    public boolean use(ChartDataBase data){
+    public boolean use(ChartDataBase data, String command, Parser parser){
         System.out.println("J'exécute le view");
         return false;
     }

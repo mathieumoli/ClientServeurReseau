@@ -1,6 +1,7 @@
 package Command;
 
 import Data.ChartDataBase;
+import Utils.Parser;
 
 /**
  * Created by user on 13/11/15.
@@ -12,7 +13,7 @@ public class QuitCommand extends Command {
     }
 
     @Override
-    public boolean use(ChartDataBase data){
+    public boolean use(ChartDataBase data , String answer, Parser parser){
         return true;
     }
 }
