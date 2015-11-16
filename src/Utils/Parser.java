@@ -1,6 +1,7 @@
 package Utils;
 
 import Command.Command;
+import Exceptions.SyntaxeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +19,9 @@ public class Parser {
      * @param req
      * @return the second argument isn't parsed
      */
-    public Command getCommand(String req){
+    public Command getCommand(String req) throws SyntaxeException{
         if(!req.endsWith(";"))
-            return new Command("",new ArrayList<>());
+            throw new SyntaxeException(new Command("RE", new ArrayList<>()));
         else
             req = req.substring(0, req.length() - 1);
 

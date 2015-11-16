@@ -5,5 +5,7 @@ package Utils;
  * Les trucs qu'on a besoin un peu partout
  */
 public class Utils {
-    public static final int numPort = 6969;
+    public static final int NUM_PORT = 6969;
+
+    public static final String UNKNOWN_CMD_TEXT = "ERR:RE:Requete Inconnue;";
 }

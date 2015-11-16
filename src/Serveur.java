@@ -1,8 +1,11 @@
 import Command.*;
 import Data.ChartDataBase;
+import Exceptions.SyntaxeException;
+import Exceptions.UnknownCmdException;
 import Utils.*;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class Serveur {
         try {
             String messageClient="init";
             String messageEnvoye;
-            serverSocket = new ServerSocket(Utils.numPort);
+            serverSocket = new ServerSocket(Utils.NUM_PORT);
             clientSocket = serverSocket.accept();
             messenger = new Messenger(clientSocket);
             /*in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -65,14 +68,26 @@ public class Serveur {
             while (! finished){
                 answer = new StringBuffer();
                 messageClient = messenger.readMessage(); //in.readLine();
-                Command commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
-                System.out.println("arguments : " + commandReq.getArguments());
-                finished = traiterCommande(commandReq, answer, parser);
+                Command commandReq;
+                try {
+                    commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
+                    System.out.println("arguments : " + commandReq.getArguments());
+                    finished = traiterCommande(commandReq, answer, parser);
+                } catch (SyntaxeException se) {
+                    //commandReq = new Command("RE", new ArrayList<>());
+                    answer.append(parser.getCommandResult(false, se.getCmdInError(), Arrays.asList(se.getMessage())));
+                } catch (UnknownCmdException uce) {
+                    commandReq = new Command("RE", new ArrayList<>());
+                    answer.append(parser.getCommandResult(false, commandReq, Arrays.asList(uce.getMessage())));
+                } finally {
+                    messenger.sendMessage(answer.toString());
+                }
+
                 System.out.println("reponse :" + answer);
                 /*out.write(answer.toString());
                 out.newLine();
                 out.flush();*/
-                messenger.sendMessage(answer.toString());
+
                 datas.printDatas();
             }
 
@@ -87,10 +102,10 @@ public class Serveur {
         }
     }
 
-    private boolean traiterCommande(Command cmd, StringBuffer answer, Parser parser){
+    private boolean traiterCommande(Command cmd, StringBuffer answer, Parser parser) throws UnknownCmdException{
         Command usableCommand = getUsableCommand(cmd);
         if(usableCommand == null) {
-            //throw exception comme quoi le commande n'est pas présente
+            throw new UnknownCmdException();
         }
         System.out.println("arguments : " + cmd.getArguments());
         usableCommand.setArguments(cmd.getArguments());

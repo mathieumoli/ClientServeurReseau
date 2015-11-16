@@ -16,7 +16,7 @@ public class Client {
     public Client() {
         try {
             String messageEnvoye="";
-            this.nameSocket = new Socket("localhost", Utils.numPort);
+            this.nameSocket = new Socket("localhost", Utils.NUM_PORT);
             in = new BufferedReader(new InputStreamReader(nameSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(nameSocket.getOutputStream()));
             Scanner sc = new Scanner(System.in);
