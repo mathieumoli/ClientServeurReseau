@@ -42,6 +42,13 @@ public class Parser {
         return Arrays.asList(str.split(token));
     }
 
+    /**
+     * Return the result of the command
+     * @param noError
+     * @param cmd
+     * @param text
+     * @return
+     */
     public String getCommandResult(boolean noError, Command cmd, List<String> text){
         String result = "";
         result = (noError == true) ? "OK" : "ERR";

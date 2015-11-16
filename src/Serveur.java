@@ -23,6 +23,7 @@ public class Serveur {
     private List<Command> allCommands;
     private Parser parser;
     private ChartDataBase datas;
+    private Messenger messenger;
 
     public Serveur() {
         this.allCommands = new ArrayList<>();
@@ -39,13 +40,15 @@ public class Serveur {
             String messageEnvoye;
             serverSocket = new ServerSocket(Utils.numPort);
             clientSocket = serverSocket.accept();
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            messenger = new Messenger(clientSocket);
+            /*in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
+            */
             //
-            out.write("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
+            /*out.write("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
             out.newLine();
-            out.flush();
+            out.flush();*/
+            messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
             /*
             //fermeture de la socket
             messageClient=in.readLine();
@@ -61,20 +64,22 @@ public class Serveur {
             StringBuffer answer;
             while (! finished){
                 answer = new StringBuffer();
-                messageClient = in.readLine();
+                messageClient = messenger.readMessage(); //in.readLine();
                 Command commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
                 System.out.println("arguments : " + commandReq.getArguments());
                 finished = traiterCommande(commandReq, answer, parser);
                 System.out.println("reponse :" + answer);
-                out.write(answer.toString());
+                /*out.write(answer.toString());
                 out.newLine();
-                out.flush();
+                out.flush();*/
+                messenger.sendMessage(answer.toString());
                 datas.printDatas();
             }
 
-            out.write("Hasta La Vista Baby !\n***** Déconnexion *****");
+            /*out.write("Hasta La Vista Baby !\n***** Déconnexion *****");
             out.newLine();
-            out.flush();
+            out.flush();*/
+            messenger.sendMessage("Hasta La Vista Baby !\n***** Déconnexion *****");
             serverSocket.close();
             clientSocket.close();
         } catch (IOException IOE) {
