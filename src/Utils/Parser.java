@@ -20,17 +20,17 @@ public class Parser {
      * @return the second argument isn't parsed
      */
     public Command getCommand(String req) throws SyntaxeException{
-        if(!req.endsWith(";"))
+        String reqTrim = req.trim();
+        if(!reqTrim.endsWith(";"))
             throw new SyntaxeException(new Command("RE", new ArrayList<>()));
         else
-            req = req.substring(0, req.length() - 1);
+            reqTrim = reqTrim.substring(0, reqTrim.length() - 1);
 
-        List<String> lStrReq = new LinkedList<String>(Arrays.asList(req.split(":")));
+        List<String> lStrReq = new LinkedList<String>(Arrays.asList(reqTrim.split(":")));
         String firstWord = lStrReq.get(0);
         lStrReq.remove(0);
         return new Command(firstWord, lStrReq);
     }
-
 
     /**
      * Return List<String> which contains the elements of str parsed by the token

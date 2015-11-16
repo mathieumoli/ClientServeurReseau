@@ -71,7 +71,7 @@ public class Serveur {
                 Command commandReq;
                 try {
                     commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
-                    System.out.println("arguments : " + commandReq.getArguments());
+                    //System.out.println("arguments : " + commandReq.getArguments());
                     finished = traiterCommande(commandReq, answer, parser);
                 } catch (SyntaxeException se) {
                     //commandReq = new Command("RE", new ArrayList<>());
@@ -104,6 +104,7 @@ public class Serveur {
 
     private boolean traiterCommande(Command cmd, StringBuffer answer, Parser parser) throws UnknownCmdException{
         Command usableCommand = getUsableCommand(cmd);
+        System.out.println(usableCommand.getCommandWord());
         if(usableCommand == null) {
             throw new UnknownCmdException();
         }
@@ -118,6 +119,7 @@ public class Serveur {
      * @return
      */
     private Command getUsableCommand(Command cmd){
+        System.out.println(cmd.getCommandWord());
         for(Command c : allCommands){;
            if(c.hasSameCommandWord(cmd))
                return c;

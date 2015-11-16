@@ -24,14 +24,31 @@ public class ChartDataBase {
         return mapNicknames.containsKey(name);
     }
 
-    public void addNickname(String name, String nickname){
-        mapNicknames.get(name).add(nickname);
+    public boolean addNickname(String name, String nickname){
+        if(! nicknameAlreadyUsed(nickname)){
+            mapNicknames.get(name).add(nickname);
+            return true;
+        }
+        return false;
     }
 
-    public void addListOfNicknames(String name, List<String> allNicknames){
-        for(String nickname : allNicknames){
-            mapNicknames.get(name).add(nickname);
+    public boolean nicknameAlreadyUsed(String nickname){
+        for(Map.Entry<String, HashSet<String>> entry : mapNicknames.entrySet()){
+            for(String str : entry.getValue()){
+                if(str.equals(nickname))
+                    return true;
+            }
         }
+        return false;
+    }
+
+    public boolean addListOfNicknames(String name, List<String> allNicknames){
+        boolean noConflict = true;
+        for(String nickname : allNicknames){
+            if(! addNickname(name, nickname))
+                noConflict = false;
+        }
+        return noConflict;
     }
 
     public void printDatas(){

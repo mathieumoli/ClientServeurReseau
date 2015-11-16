@@ -8,7 +8,7 @@ import Utils.Utils;
 public class UnknownCmdException extends Exception {
 
     public UnknownCmdException(){
-        super("Requete Inconnue");
+        super("Requete inconnue");
     }
 
     public String getMessage(){
