@@ -5,7 +5,6 @@ import Exceptions.UnknownCmdException;
 import Utils.*;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,9 +19,6 @@ public class Serveur {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
-    private BufferedReader in;
-    private BufferedWriter out;
-    private HashMap<String,List<String>> mapSurnom=new HashMap<String,List<String>>();
     private List<Command> allCommands;
     private Parser parser;
     private ChartDataBase datas;
@@ -39,76 +35,74 @@ public class Serveur {
 
     public void launch(){
         try {
-            String messageClient="init";
-            String messageEnvoye;
+            String messageClient = "";
+            String messageEnvoye = "";
             serverSocket = new ServerSocket(Utils.NUM_PORT);
             clientSocket = serverSocket.accept();
             messenger = new Messenger(clientSocket);
-            /*in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            */
-            //
-            /*out.write("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
-            out.newLine();
-            out.flush();*/
             messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
-            /*
-            //fermeture de la socket
-            messageClient=in.readLine();
-            while(!(messageClient.equals("QUIT"))){
-                System.out.println(messageClient);
-                out.write(traiterRequeteClient(messageClient));
-                out.newLine();
-                out.flush();
-                messageClient=in.readLine();
-            }
-            System.out.println(messageClient);*/
+            //Communication
             boolean finished = false;
             StringBuffer answer;
             while (! finished){
                 answer = new StringBuffer();
-                messageClient = messenger.readMessage(); //in.readLine();
+                messageClient = messenger.readMessage();
+                //si le client quitte sans prévenir
+                if(messageClient == null) {
+                    closeConnection(serverSocket, clientSocket);
+                    return;
+                }
                 Command commandReq;
                 try {
-                    commandReq = parser.getCommand(messageClient);//mettre en place un système d'exceptions pour erreur dans parsage ?
-                    //System.out.println("arguments : " + commandReq.getArguments());
+                    //on récupere la commande
+                    commandReq = parser.getCommand(messageClient);
+                    //on fait le traitement de la commande
                     finished = traiterCommande(commandReq, answer, parser);
                 } catch (SyntaxeException se) {
-                    //commandReq = new Command("RE", new ArrayList<>());
                     answer.append(parser.getCommandResult(false, se.getCmdInError(), Arrays.asList(se.getMessage())));
                 } catch (UnknownCmdException uce) {
                     commandReq = new Command("RE", new ArrayList<>());
                     answer.append(parser.getCommandResult(false, commandReq, Arrays.asList(uce.getMessage())));
                 } finally {
+                    //On envoie le message au client
                     messenger.sendMessage(answer.toString());
                 }
-
-                System.out.println("reponse :" + answer);
-                /*out.write(answer.toString());
-                out.newLine();
-                out.flush();*/
-
-                datas.printDatas();
             }
-
-            /*out.write("Hasta La Vista Baby !\n***** Déconnexion *****");
-            out.newLine();
-            out.flush();*/
             messenger.sendMessage("Hasta La Vista Baby !\n***** Déconnexion *****");
-            serverSocket.close();
-            clientSocket.close();
+            closeConnection(serverSocket, clientSocket);
         } catch (IOException IOE) {
             System.err.println(IOE);
         }
     }
 
+    /**
+     * Close sockets
+     * @param ss
+     * @param s
+     */
+    private void closeConnection(ServerSocket ss, Socket s){
+        try {
+            ss.close();
+            s.close();
+        } catch (IOException IOE){
+            System.err.println(IOE);
+        }
+
+    }
+
+    /**
+     * Process the command sent by the client
+     * @param cmd
+     * @param answer
+     * @param parser
+     * @return
+     * @throws UnknownCmdException
+     */
     private boolean traiterCommande(Command cmd, StringBuffer answer, Parser parser) throws UnknownCmdException{
         Command usableCommand = getUsableCommand(cmd);
-        System.out.println(usableCommand.getCommandWord());
         if(usableCommand == null) {
             throw new UnknownCmdException();
         }
-        System.out.println("arguments : " + cmd.getArguments());
         usableCommand.setArguments(cmd.getArguments());
         return usableCommand.use(datas, answer, parser);
     }
@@ -119,7 +113,6 @@ public class Serveur {
      * @return
      */
     private Command getUsableCommand(Command cmd){
-        System.out.println(cmd.getCommandWord());
         for(Command c : allCommands){;
            if(c.hasSameCommandWord(cmd))
                return c;
@@ -127,6 +120,7 @@ public class Serveur {
         return null;
     }
 
+    /*
     private String traiterRequeteClient(String message){
         String result="";
         int i;
@@ -161,7 +155,7 @@ public class Serveur {
         }
         return result;
     }
-
+    */
     /**
      *Fonction de gestion d'ajout de personne dans la HashMap
      *Cette fonction permet :
@@ -169,7 +163,7 @@ public class Serveur {
      *      d'ajouter un nom avec un ou plusieurs surnoms
      *
      **/
-    String ajouterPersonne(List<String>requete){
+    /*String ajouterPersonne(List<String>requete){
         String messageRetour="";
         List<String> surnom=mapSurnom.get(requete.get(1));
         String nom=requete.get(1);
@@ -190,7 +184,7 @@ public class Serveur {
         messageRetour="OK:ADD";
         return messageRetour;
 
-    }
+    }*/
 
     public static void main(String[] args) {
         Serveur serveur = new Serveur();

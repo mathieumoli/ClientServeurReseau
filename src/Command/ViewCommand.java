@@ -19,20 +19,25 @@ public class ViewCommand extends Command{
     public boolean use(ChartDataBase data, StringBuffer answer, Parser parser){
         List<String> allAnswers = new ArrayList<>();
         if(this.getArguments().size() >= 2){
-            //erreur syntaxe
+            allAnswers.add("Syntaxe incorrect");
+            answer.append(parser.getCommandResult(false, this, allAnswers));
+            return false;
         }
         if(this.getArguments().isEmpty()){
-            //return tout
+            answer.append(parser.getCommandResult(true, this, data.getAllDatasInListString()));
+            return false;
         }
 
-        if(this.getArguments().get(0).toLowerCase().equals("names")){
-            //affiche les nomns
-        } else if(this.getArguments().get(0).toLowerCase().equals("nicknames")){
-            //affiche les surnoms
+        if(this.getArguments().get(0).equals("NAMES")){
+            allAnswers.add(data.getAllNamesInString());
+            answer.append(parser.getCommandResult(true, this, allAnswers));
+        } else if (this.getArguments().get(0).equals("NICKNAMES")){
+            allAnswers.add(data.getAllNicknamesInString());
+            answer.append(parser.getCommandResult(true, this, allAnswers));
         } else {
-            //erreur nom inconnu
+            allAnswers.add("Nom inconnu");
+            answer.append(parser.getCommandResult(false, this, allAnswers));
         }
-
         return false;
     }
 

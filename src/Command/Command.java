@@ -3,6 +3,7 @@ package Command;
 import Data.ChartDataBase;
 import Utils.Parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,11 +20,11 @@ public class Command {
     }
 
     public boolean hasSameCommandWord(Command cmd){
-        return this.commandWord.equals(cmd.getCommandWord());
+        return this.commandWord.toUpperCase().equals(cmd.getCommandWord());
     }
 
     public String getCommandWord() {
-        return commandWord;
+        return commandWord.toUpperCase();
     }
 
     public boolean use(ChartDataBase data, StringBuffer answer, Parser parser){
@@ -35,6 +36,10 @@ public class Command {
     }
 
     public List<String> getArguments() {
-        return arguments;
+        List<String> args = new ArrayList<>();
+        for(int i = 0 ; i < arguments.size() ; ++i){
+            args.add(arguments.get(i).toUpperCase());
+        }
+        return args;
     }
 }
