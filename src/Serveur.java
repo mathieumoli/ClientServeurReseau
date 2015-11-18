@@ -50,11 +50,11 @@ public class Serveur {
                 while ((! finished)) {
                     answer = new StringBuffer();
                     messageClient = messenger.readMessage();
+                    System.out.println("requete : " + messageClient);
                     //si le client quitte sans prévenir
                     if (messageClient == null) {
                         break;
                     }
-                    System.out.println(messageClient);
                     Command commandReq;
                     try {
                         //on récupere la commande
@@ -72,7 +72,7 @@ public class Serveur {
                     }
                     datas.printDatas();
                 }
-                messenger.sendMessage("Hasta La Vista Baby !\n***** Déconnexion *****");
+                clientSocket.close();
             }
             closeConnection(serverSocket, clientSocket);
         } catch (IOException IOE) {
@@ -88,6 +88,7 @@ public class Serveur {
     private void closeConnection(ServerSocket ss, Socket s){
         try {
             ss.close();
+            System.out.println("client socket");
             s.close();
         } catch (IOException IOE){
             System.err.println(IOE);

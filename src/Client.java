@@ -25,7 +25,7 @@ public class Client {
             Scanner sc = new Scanner(System.in);
 
 
-            //System.out.println(in.readLine());
+            System.out.println(in.readLine());
             while(!messageEnvoye.toUpperCase().equals("QUIT;")){
                 System.out.printf("Ecrire une requête et appuyer sur ENTER\n");
                 messageEnvoye=sc.nextLine();
@@ -33,7 +33,7 @@ public class Client {
                 out.write(messageEnvoye);
                 out.newLine();
                 out.flush();
-                //System.out.println(in.readLine());
+                System.out.println(in.readLine());
             }
 
             //System.out.println(in.readLine());
