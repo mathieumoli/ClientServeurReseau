@@ -37,24 +37,25 @@ public class Serveur {
         try {
             String messageClient = "";
             String messageEnvoye = "";
-            serverSocket = new ServerSocket(Utils.NUM_PORT);
             int cptClient = 0;
+            serverSocket = new ServerSocket(Utils.NUM_PORT);
             while(cptClient < 5){
+                cptClient++;
                 clientSocket = serverSocket.accept();
                 messenger = new Messenger(clientSocket);
                 messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
                 //Communication
                 boolean finished = false;
                 StringBuffer answer;
-                while (! finished){
+                while ((! finished)|| ((messageClient = messenger.readMessage())!=null)) {
                     answer = new StringBuffer();
-                    messageClient = messenger.readMessage();
+                   // messageClient = messenger.readMessage();
                     //si le client quitte sans prévenir
-                    if(messageClient == null) {
+                    /*if (messageClient == null) {
                         closeConnection(serverSocket, clientSocket);
                         return;
-                    }
-                    Command commandReq;
+                    }*/
+                    System.out.println(messageClient);Command commandReq;
                     try {
                         //on récupere la commande
                         commandReq = parser.getCommand(messageClient);
@@ -69,6 +70,7 @@ public class Serveur {
                         //On envoie le message au client
                         messenger.sendMessage(answer.toString());
                     }
+                    datas.printDatas();
                 }
                 messenger.sendMessage("Hasta La Vista Baby !\n***** Déconnexion *****");
             }
