@@ -19,23 +19,24 @@ public class Client {
         try {
             String messageEnvoye="";
             InetAddress addr = Inet4Address.getByAddress(Utils.addresseServeur);
-            this.nameSocket = new Socket(addr, Utils.NUM_PORT);
+            this.nameSocket = new Socket("localhost", Utils.NUM_PORT);
             in = new BufferedReader(new InputStreamReader(nameSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(nameSocket.getOutputStream()));
             Scanner sc = new Scanner(System.in);
 
 
-            System.out.println(in.readLine());
-            while(!messageEnvoye.toUpperCase().equals("QUIT")){
+            //System.out.println(in.readLine());
+            while(!messageEnvoye.toUpperCase().equals("QUIT;")){
                 System.out.printf("Ecrire une requête et appuyer sur ENTER\n");
                 messageEnvoye=sc.nextLine();
+                System.out.println(messageEnvoye);
                 out.write(messageEnvoye);
                 out.newLine();
                 out.flush();
-                System.out.println(in.readLine());
+                //System.out.println(in.readLine());
             }
 
-            System.out.println(in.readLine());
+            //System.out.println(in.readLine());
             //Close
             sc.close();
             nameSocket.close();

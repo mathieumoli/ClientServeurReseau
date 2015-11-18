@@ -4,6 +4,7 @@ import Exceptions.SyntaxeException;
 import Exceptions.UnknownCmdException;
 import Utils.*;
 
+import javax.xml.transform.sax.SAXSource;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -39,23 +40,22 @@ public class Serveur {
             String messageEnvoye = "";
             int cptClient = 0;
             serverSocket = new ServerSocket(Utils.NUM_PORT);
-            while(cptClient < 5){
-                cptClient++;
+            while(cptClient++ < 5){
                 clientSocket = serverSocket.accept();
                 messenger = new Messenger(clientSocket);
                 messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
                 //Communication
                 boolean finished = false;
                 StringBuffer answer;
-                while ((! finished)|| ((messageClient = messenger.readMessage())!=null)) {
+                while ((! finished)) {
                     answer = new StringBuffer();
-                   // messageClient = messenger.readMessage();
+                    messageClient = messenger.readMessage();
                     //si le client quitte sans prévenir
-                    /*if (messageClient == null) {
-                        closeConnection(serverSocket, clientSocket);
-                        return;
-                    }*/
-                    System.out.println(messageClient);Command commandReq;
+                    if (messageClient == null) {
+                        break;
+                    }
+                    System.out.println(messageClient);
+                    Command commandReq;
                     try {
                         //on récupere la commande
                         commandReq = parser.getCommand(messageClient);
