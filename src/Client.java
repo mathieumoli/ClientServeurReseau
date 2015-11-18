@@ -1,6 +1,8 @@
 import Utils.Utils;
 
 import java.io.*;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -16,14 +18,15 @@ public class Client {
     public Client() {
         try {
             String messageEnvoye="";
-            this.nameSocket = new Socket("localhost", Utils.NUM_PORT);
+            InetAddress addr = Inet4Address.getByAddress(Utils.addresseServeur);
+            this.nameSocket = new Socket(addr, Utils.NUM_PORT);
             in = new BufferedReader(new InputStreamReader(nameSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(nameSocket.getOutputStream()));
             Scanner sc = new Scanner(System.in);
 
 
             System.out.println(in.readLine());
-            while(!messageEnvoye.equals("QUIT")){
+            while(!messageEnvoye.toUpperCase().equals("QUIT")){
                 System.out.printf("Ecrire une requête et appuyer sur ENTER\n");
                 messageEnvoye=sc.nextLine();
                 out.write(messageEnvoye);
