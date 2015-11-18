@@ -38,37 +38,40 @@ public class Serveur {
             String messageClient = "";
             String messageEnvoye = "";
             serverSocket = new ServerSocket(Utils.NUM_PORT);
-            clientSocket = serverSocket.accept();
-            messenger = new Messenger(clientSocket);
-            messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
-            //Communication
-            boolean finished = false;
-            StringBuffer answer;
-            while (! finished){
-                answer = new StringBuffer();
-                messageClient = messenger.readMessage();
-                //si le client quitte sans prévenir
-                if(messageClient == null) {
-                    closeConnection(serverSocket, clientSocket);
-                    return;
+            int cptClient = 0;
+            while(cptClient < 5){
+                clientSocket = serverSocket.accept();
+                messenger = new Messenger(clientSocket);
+                messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
+                //Communication
+                boolean finished = false;
+                StringBuffer answer;
+                while (! finished){
+                    answer = new StringBuffer();
+                    messageClient = messenger.readMessage();
+                    //si le client quitte sans prévenir
+                    if(messageClient == null) {
+                        closeConnection(serverSocket, clientSocket);
+                        return;
+                    }
+                    Command commandReq;
+                    try {
+                        //on récupere la commande
+                        commandReq = parser.getCommand(messageClient);
+                        //on fait le traitement de la commande
+                        finished = traiterCommande(commandReq, answer, parser);
+                    } catch (SyntaxeException se) {
+                        answer.append(parser.getCommandResult(false, se.getCmdInError(), Arrays.asList(se.getMessage())));
+                    } catch (UnknownCmdException uce) {
+                        commandReq = new Command("RE", new ArrayList<>());
+                        answer.append(parser.getCommandResult(false, commandReq, Arrays.asList(uce.getMessage())));
+                    } finally {
+                        //On envoie le message au client
+                        messenger.sendMessage(answer.toString());
+                    }
                 }
-                Command commandReq;
-                try {
-                    //on récupere la commande
-                    commandReq = parser.getCommand(messageClient);
-                    //on fait le traitement de la commande
-                    finished = traiterCommande(commandReq, answer, parser);
-                } catch (SyntaxeException se) {
-                    answer.append(parser.getCommandResult(false, se.getCmdInError(), Arrays.asList(se.getMessage())));
-                } catch (UnknownCmdException uce) {
-                    commandReq = new Command("RE", new ArrayList<>());
-                    answer.append(parser.getCommandResult(false, commandReq, Arrays.asList(uce.getMessage())));
-                } finally {
-                    //On envoie le message au client
-                    messenger.sendMessage(answer.toString());
-                }
+                messenger.sendMessage("Hasta La Vista Baby !\n***** Déconnexion *****");
             }
-            messenger.sendMessage("Hasta La Vista Baby !\n***** Déconnexion *****");
             closeConnection(serverSocket, clientSocket);
         } catch (IOException IOE) {
             System.err.println(IOE);
