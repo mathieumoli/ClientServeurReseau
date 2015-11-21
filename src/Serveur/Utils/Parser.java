@@ -1,7 +1,7 @@
-package Utils;
+package Serveur.Utils;
 
-import Command.Command;
-import Exceptions.SyntaxeException;
+import Serveur.Command.Command;
+import Serveur.Exceptions.SyntaxeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

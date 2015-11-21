@@ -1,17 +1,19 @@
-import Command.*;
-import Data.ChartDataBase;
-import Exceptions.SyntaxeException;
-import Exceptions.UnknownCmdException;
-import Utils.*;
+package Serveur;
 
-import javax.xml.transform.sax.SAXSource;
+import Serveur.Command.*;
+import Serveur.Data.ChartDataBase;
+import Serveur.Data.CommandsList;
+import Serveur.Exceptions.SyntaxeException;
+import Serveur.Exceptions.UnknownCmdException;
+import Serveur.Utils.*;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * Created by Molinengo/Soumille on 04/11/15.
@@ -20,16 +22,15 @@ public class Serveur {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
+
+
     private List<Command> allCommands;
     private Parser parser;
     private ChartDataBase datas;
     private Messenger messenger;
 
     public Serveur() {
-        this.allCommands = new ArrayList<>();
-        allCommands.add(new ViewCommand());
-        allCommands.add(new AddCommand());
-        allCommands.add(new QuitCommand());
+        this.allCommands = new CommandsList();
         parser = new Parser();
         datas = new ChartDataBase();
     }
@@ -191,6 +192,7 @@ public class Serveur {
         return messageRetour;
 
     }*/
+
 
     public static void main(String[] args) {
         Serveur serveur = new Serveur();

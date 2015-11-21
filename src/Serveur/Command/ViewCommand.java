@@ -1,7 +1,7 @@
-package Command;
+package Serveur.Command;
 
-import Data.ChartDataBase;
-import Utils.Parser;
+import Serveur.Data.ChartDataBase;
+import Serveur.Utils.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import java.util.List;
  * Created by user on 13/11/15.
  */
 public class ViewCommand extends Command{
+
+    private List argumentsConnus=new ArrayList<String>(){{add("NAMES");add("NICKNAMES");}};
 
     public ViewCommand() {
         super("VIEW", new ArrayList<>());
@@ -27,11 +29,12 @@ public class ViewCommand extends Command{
             answer.append(parser.getCommandResult(true, this, data.getAllDatasInListString()));
             return false;
         }
-
-        if(this.getArguments().get(0).equals("NAMES")){
+        //Verification si l'argument vaut NAMES
+        if(this.getArguments().get(0).equals(argumentsConnus.get(0))){
             allAnswers.add(data.getAllNamesInString());
             answer.append(parser.getCommandResult(true, this, allAnswers));
-        } else if (this.getArguments().get(0).equals("NICKNAMES")){
+            //Verification si l'argument vaut NICKNAMES
+        } else if (this.getArguments().get(0).equals(argumentsConnus.get(1))){
             allAnswers.add(data.getAllNicknamesInString());
             answer.append(parser.getCommandResult(true, this, allAnswers));
         } else {
@@ -40,5 +43,10 @@ public class ViewCommand extends Command{
         }
         return false;
     }
+
+    public List getArgumentsConnus() {
+        return argumentsConnus;
+    }
+
 
 }

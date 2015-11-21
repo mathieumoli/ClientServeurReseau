@@ -1,7 +1,6 @@
-package Exceptions;
+package Serveur.Exceptions;
 
-import Command.Command;
-import Utils.Utils;
+import Serveur.Command.Command;
 
 /**
  * Created by user on 16/11/15.

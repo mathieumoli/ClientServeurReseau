@@ -1,4 +1,4 @@
-package Utils;
+package Serveur.Utils;
 
 import java.io.*;
 import java.net.Socket;

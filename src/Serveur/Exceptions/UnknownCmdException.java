@@ -1,6 +1,4 @@
-package Exceptions;
-
-import Utils.Utils;
+package Serveur.Exceptions;
 
 /**
  * Created by user on 16/11/15.
