@@ -38,7 +38,6 @@ public class Serveur {
     public void launch(){
         try {
             String messageClient = "";
-            String messageEnvoye = "";
             int cptClient = 0;
             serverSocket = new ServerSocket(Utils.NUM_PORT);
             while(cptClient++ < 5){

@@ -45,4 +45,13 @@ public class AddCommand extends Command {
         answer.append(parser.getCommandResult(true, this, new ArrayList<>()));
         return false;
     }
+
+    @Override
+    public List<String> getAllSyntaxes(){
+        List<String> allSyntaxes = new ArrayList<>();
+        allSyntaxes.add("ADD:nom:surnom1,surnom2");
+        allSyntaxes.add("ADD:nom:surnom");
+        allSyntaxes.add("ADD:nom");
+        return allSyntaxes;
+    }
 }

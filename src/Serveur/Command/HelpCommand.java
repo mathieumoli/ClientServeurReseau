@@ -14,10 +14,7 @@ import Serveur.Serveur;
 public class HelpCommand extends Command{
 
     public HelpCommand(){
-
         super("HELP",new ArrayList<>());
-
-
     }
 
 
@@ -33,7 +30,7 @@ public class HelpCommand extends Command{
         } else {
 
             List<Command> commandes = new CommandsList();
-            int i;
+            /*int i;
             for (i = 0; i < commandes.size(); ++i) {
                 Command c = commandes.get(i);
                 if (c.getCommandWord().equals("ADD")) {
@@ -50,14 +47,22 @@ public class HelpCommand extends Command{
                     }
                     allAnswers.add(commandes.get(i).getCommandWord());
                 }
+            }*/
+            for(Command cmd : commandes) {
+                for (String str : cmd.getAllSyntaxes()) {
+                    allAnswers.add(str);
+                }
             }
-
             answer.append(parser.getCommandResult(true, this, allAnswers));
             return false;
-
         }
+    }
 
-
+    @Override
+    public List<String> getAllSyntaxes(){
+        List<String> allSyntaxes = new ArrayList<>();
+        allSyntaxes.add("HELP");
+        return allSyntaxes;
     }
 
 

@@ -42,4 +42,6 @@ public class Command {
         }
         return args;
     }
+
+    public List<String> getAllSyntaxes(){ return new ArrayList<>();};
 }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ViewCommand extends Command{
 
-    private List argumentsConnus=new ArrayList<String>(){{add("NAMES");add("NICKNAMES");}};
+    private List<String> argumentsConnus = new ArrayList<String>(){{add("NAMES");add("NICKNAMES");}};
 
     public ViewCommand() {
         super("VIEW", new ArrayList<>());
@@ -44,9 +44,16 @@ public class ViewCommand extends Command{
         return false;
     }
 
-    public List getArgumentsConnus() {
+    public List<String> getArgumentsConnus() {
         return argumentsConnus;
     }
 
-
+    @Override
+    public List<String> getAllSyntaxes() {
+        List<String> allSyntaxes = new ArrayList<>();
+        for (String str : argumentsConnus) {
+            allSyntaxes.add("VIEW:" + str.toLowerCase());
+        }
+        return allSyntaxes;
+    }
 }
