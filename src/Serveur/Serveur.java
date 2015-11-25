@@ -38,9 +38,8 @@ public class Serveur {
     public void launch(){
         try {
             String messageClient = "";
-            int cptClient = 0;
             serverSocket = new ServerSocket(Utils.NUM_PORT);
-            while(cptClient++ < 5){
+            while(true){
                 clientSocket = serverSocket.accept();
                 messenger = new Messenger(clientSocket);
                 messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
@@ -74,7 +73,7 @@ public class Serveur {
                 }
                 clientSocket.close();
             }
-            closeConnection(serverSocket, clientSocket);
+            //closeConnection(serverSocket, clientSocket);
         } catch (IOException IOE) {
             System.err.println(IOE);
         }
