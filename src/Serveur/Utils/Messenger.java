@@ -15,6 +15,7 @@ public class Messenger {
         try {
             in = new BufferedReader(new InputStreamReader(socketToBind.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socketToBind.getOutputStream()));
+            System.out.println(out);
         } catch (IOException IOE) {
             System.err.println(IOE);
         }
