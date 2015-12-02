@@ -18,64 +18,58 @@ import java.util.List;
 /**
  * Created by Molinengo/Soumille on 04/11/15.
  */
-public class Serveur {
+public class Serveur extends Thread {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
 
-
     private List<Command> allCommands;
     private Parser parser;
-    private ChartDataBase datas;
+    private static ChartDataBase datas;
     private Messenger messenger;
 
-    public Serveur() {
+    public Serveur(Socket sock) {
         this.allCommands = new CommandsList();
         parser = new Parser();
         datas = new ChartDataBase();
+        clientSocket = sock;
+        messenger = new Messenger(sock);
     }
 
-    public void launch(){
-        try {
-            String messageClient = "";
-            serverSocket = new ServerSocket(Utils.NUM_PORT);
-            while(true){
-                clientSocket = serverSocket.accept();
-                messenger = new Messenger(clientSocket);
-                messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
-                //Communication
-                boolean finished = false;
-                StringBuffer answer;
-                while ((! finished)) {
-                    answer = new StringBuffer();
-                    messageClient = messenger.readMessage();
-                    System.out.println("requete : " + messageClient);
-                    //si le client quitte sans prévenir
-                    if (messageClient == null) {
-                        break;
-                    }
-                    Command commandReq;
-                    try {
-                        //on récupere la commande
-                        commandReq = parser.getCommand(messageClient);
-                        //on fait le traitement de la commande
-                        finished = traiterCommande(commandReq, answer, parser);
-                    } catch (SyntaxeException se) {
-                        answer.append(parser.getCommandResult(false, se.getCmdInError(), Arrays.asList(se.getMessage())));
-                    } catch (UnknownCmdException uce) {
-                        commandReq = new Command("RE", new ArrayList<>());
-                        answer.append(parser.getCommandResult(false, commandReq, Arrays.asList(uce.getMessage())));
-                    } finally {
-                        //On envoie le message au client
-                        messenger.sendMessage(answer.toString());
-                    }
-                    datas.printDatas();
-                }
-                clientSocket.close();
+    /**
+     * process executed for each thread
+     */
+    public void run(){
+        String messageClient ="";
+        System.out.println(messenger);
+        messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
+        //Communication
+        boolean finished = false;
+        StringBuffer answer;
+        while ((! finished)) {
+            answer = new StringBuffer();
+            messageClient = messenger.readMessage();
+            System.out.println("requete : " + messageClient);
+            //si le client quitte sans prévenir
+            if (messageClient == null) {
+                break;
             }
-            //closeConnection(serverSocket, clientSocket);
-        } catch (IOException IOE) {
-            System.err.println(IOE);
+            Command commandReq;
+            try {
+                //on récupere la commande
+                commandReq = parser.getCommand(messageClient);
+                //on fait le traitement de la commande
+                finished = traiterCommande(commandReq, answer, parser);
+            } catch (SyntaxeException se) {
+                answer.append(parser.getCommandResult(false, se.getCmdInError(), Arrays.asList(se.getMessage())));
+            } catch (UnknownCmdException uce) {
+                commandReq = new Command("RE", new ArrayList<>());
+                answer.append(parser.getCommandResult(false, commandReq, Arrays.asList(uce.getMessage())));
+            } finally {
+                //On envoie le message au client
+                messenger.sendMessage(answer.toString());
+            }
+            datas.printDatas();
         }
     }
 
@@ -125,75 +119,16 @@ public class Serveur {
         return null;
     }
 
-    /*
-    private String traiterRequeteClient(String message){
-        String result="";
-        int i;
-
-        if(!message.endsWith(";")) return "ERR:RE:la requete doit finir par un ';'" +
-                " ou la message n'a pas été reçu en entiere " +
-                "Veuillez recommencer";
-
-        //decoupage de la requete en multisousrequetes
-        List<String> lReq=Arrays.asList(message.split(";"));
-        List<String> req;
-        for(i=0;i<lReq.size();i++) {
-
-            // a revoir je pense que ça serait mieux de decouper plus bas dans view et add et voir pour le $
-            req = Arrays.asList(lReq.get(i).split(":|,"));
-
-            // pour eviter les problemes de casse toUpper
-            switch (req.get(0).toUpperCase()) {
-                case "ADD":
-                    System.out.println("case ADD:Découpage requete =" + req.toString());
-                    result += ajouterPersonne(req)+";";
-                    break;
-                case "VIEW":
-                    System.out.println("case VIEW : Découpage requete =" + req.toString());
-                    result += "jai trouvé le VIEW"+";";
-                    break;
-                default:
-                    result = "ERR:RE:requete inconnue !"+";";
-                    System.out.println("case default : Découpage requete =" + req.toString());
-            }
-
-        }
-        return result;
-    }
-    */
-    /**
-     *Fonction de gestion d'ajout de personne dans la HashMap
-     *Cette fonction permet :
-     *      d'ajouter un surnom à une personne déjà connu dans la hashmap
-     *      d'ajouter un nom avec un ou plusieurs surnoms
-     *
-     **/
-    /*String ajouterPersonne(List<String>requete){
-        String messageRetour="";
-        List<String> surnom=mapSurnom.get(requete.get(1));
-        String nom=requete.get(1);
-        //impossible de faire des remove à partir d'une liste crée grace à Array.asList
-        ArrayList<String>copieRequete=new ArrayList<>(requete);
-
-        //retrait des premiers champs inutiles
-        //retrait du mot clé de la commande
-        copieRequete.remove(0);
-        //retrait du nom
-        copieRequete.remove(0);
-        //split de tous les surnoms
-        if(surnom==null)surnom=new ArrayList<>();
-        while(copieRequete.size()!=0){
-            surnom.add(copieRequete.remove(0));
-        }
-        mapSurnom.put(nom,surnom);
-        messageRetour="OK:ADD";
-        return messageRetour;
-
-    }*/
-
-
     public static void main(String[] args) {
-        Serveur serveur = new Serveur();
-        serveur.launch();
+        ServerSocket servSock = null;
+        try {
+            servSock = new ServerSocket(Utils.NUM_PORT);
+            while(true){
+                new Serveur(servSock.accept()).start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
