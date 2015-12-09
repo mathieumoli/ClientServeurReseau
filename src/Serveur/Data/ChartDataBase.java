@@ -32,6 +32,10 @@ public class ChartDataBase {
         return false;
     }
 
+    public int getNbNom(){
+        return mapNicknames.entrySet().size();
+    }
+
     public boolean nicknameAlreadyUsed(String nickname){
         for(Map.Entry<String, HashSet<String>> entry : mapNicknames.entrySet()){
             for(String str : entry.getValue()){

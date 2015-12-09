@@ -1,9 +1,6 @@
 package Serveur.Data;
 
-import Serveur.Command.AddCommand;
-import Serveur.Command.HelpCommand;
-import Serveur.Command.QuitCommand;
-import Serveur.Command.ViewCommand;
+import Serveur.Command.*;
 
 import java.util.ArrayList;
 
@@ -18,5 +15,6 @@ public class CommandsList extends ArrayList{
         this.add(new AddCommand());
         this.add(new QuitCommand());
         this.add(new HelpCommand());
+        this.add(new CountCommand());
     }
 }

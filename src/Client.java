@@ -14,17 +14,23 @@ public class Client {
     private Socket nameSocket;
     BufferedReader in;
     BufferedWriter out;
+    Scanner sc;
 
     public Client() {
         try {
-            String messageEnvoye="";
             InetAddress addr = Inet4Address.getByAddress(Utils.addresseServeur);
             this.nameSocket = new Socket("localhost", Utils.NUM_PORT);
             in = new BufferedReader(new InputStreamReader(nameSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(nameSocket.getOutputStream()));
-            Scanner sc = new Scanner(System.in);
+            sc = new Scanner(System.in);
+        } catch (IOException IOE){
+            System.err.println(IOE);
+        }
+    }
 
-
+    public void process(){
+        String messageEnvoye="";
+        try {
             System.out.println(in.readLine());
             while(!messageEnvoye.toUpperCase().equals("QUIT;")){
                 System.out.printf("Ecrire une requête et appuyer sur ENTER\n");
@@ -35,17 +41,52 @@ public class Client {
                 out.flush();
                 System.out.println(in.readLine());
             }
+            endConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void processWithOneRequest(String name){
+        String messageEnvoye = "add:" + name + ";";
+        try {
             //System.out.println(in.readLine());
-            //Close
-            sc.close();
+            in.readLine();
+            out.write(messageEnvoye);
+            out.newLine();
+            out.flush();
+            //System.out.println(in.readLine());
+            in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void countDB(){
+        String messageEnvoye = "count;";
+        try {
+            //System.out.println();
+            in.readLine();
+            out.write(messageEnvoye);
+            out.newLine();
+            out.flush();
+            System.out.println(in.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void endConnection(){
+        sc.close();
+        try {
             nameSocket.close();
-        } catch (IOException IOE){
-            System.err.println(IOE);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
         Client cli = new Client();
+        cli.process();
     }
 }
