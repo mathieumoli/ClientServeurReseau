@@ -6,7 +6,7 @@ public class MultiClient {
     public static void main(String[] args) {
         for(int i = 0 ; i < 100000 ; ++i){
             Client cli = new Client();
-            cli.processWithOneRequest("name"+i);
+            cli.processWithOneRequest("add","name"+i);
         }
         Client cli = new Client();
         cli.countDB();

@@ -15,6 +15,13 @@ public class AddCommand extends Command {
         super("ADD",new ArrayList<>());
     }
 
+    /**
+    * process executed when the client send an add command
+    * @param data
+    * @param answer
+    * @param parser
+    * @return
+     */
     @Override
     public boolean use(ChartDataBase data, StringBuffer answer, Parser parser){
         List<String> allAnswers = new ArrayList<>();
@@ -33,7 +40,6 @@ public class AddCommand extends Command {
         } else {
             data.addName(name);
         }
-
         if(this.getArguments().size() != 1){
             List<String> allNicknames = parser.getParsedListByToken(this.getArguments().get(1), ",");
             if(! data.addListOfNicknames(name, allNicknames)){
@@ -46,6 +52,10 @@ public class AddCommand extends Command {
         return false;
     }
 
+    /**
+     * return all the syntaxes available for an add request
+     * @return
+     */
     @Override
     public List<String> getAllSyntaxes(){
         List<String> allSyntaxes = new ArrayList<>();

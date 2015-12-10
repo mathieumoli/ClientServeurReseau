@@ -1,5 +1,5 @@
-import requete.AjoutSurnom;
-import requete.ListerPersonne;
+//import requete.AjoutSurnom;
+//import requete.ListerPersonne;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -14,17 +14,19 @@ public class ClientObjet {
     private Socket nameSocket;
     ObjectInputStream in;
     ObjectOutputStream out;
-    public byte[] addrEdgard = new byte[] {(byte)10, (byte)212, (byte)121, (byte)165};
-    int portEdgard = 8888;
+    public byte[] addrGatien = new byte[] {(byte)10, (byte)212, (byte)121, (byte)165};
+    int portGatien = 8888;
 
     public ClientObjet() {
-        try {
+        /**
+         * Must include gatien's library and decomment the code below
+         */
+        /*try {
             String messageEnvoye="";
-            InetAddress addr = Inet4Address.getByAddress(addrEdgard);
-            this.nameSocket = new Socket(addr, portEdgard);
+            InetAddress addr = Inet4Address.getByAddress(addrGatien);
+            this.nameSocket = new Socket(addr, portGatien);
             in = new ObjectInputStream(nameSocket.getInputStream());
             out = new ObjectOutputStream(nameSocket.getOutputStream());
-            //Scanner sc = new Scanner(System.in);
             System.out.println(in.readObject());
             ListerPersonne list = new ListerPersonne();
             out.writeObject(list);
@@ -35,25 +37,12 @@ public class ClientObjet {
             out.writeObject(list);
             System.out.println(in.readObject());
             out.writeObject(null);
-            /*
-            //System.out.println(in.readLine());
-            while(){
-                System.out.printf("Ecrire une requête et appuyer sur ENTER\n");
-                messageEnvoye=sc.nextLine();
-                System.out.println(messageEnvoye);
-                out.println(messageEnvoye);
-                System.out.println(in.readLine());
-            }
-
-            //System.out.println(in.readLine());
-            //Close
-            sc.close();*/
             nameSocket.close();
         } catch (IOException IOE){
             System.err.println(IOE);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public static void main(String[] args) {

@@ -17,37 +17,22 @@ public class HelpCommand extends Command{
         super("HELP",new ArrayList<>());
     }
 
-
+    /**
+     * process executed when the client send a help command
+     * @param data
+     * @param answer
+     * @param parser
+     * @return
+     */
     @Override
     public boolean use(ChartDataBase data, StringBuffer answer, Parser parser) {
-
         List<String> allAnswers = new ArrayList<>();
-
         if (this.getArguments().size() >= 1) {
             allAnswers.add("Syntaxe incorrect");
             answer.append(parser.getCommandResult(false, this, allAnswers));
             return false;
         } else {
-
             List<Command> commandes = new CommandsList();
-            /*int i;
-            for (i = 0; i < commandes.size(); ++i) {
-                Command c = commandes.get(i);
-                if (c.getCommandWord().equals("ADD")) {
-                    allAnswers.add("ADD:nom:surnom1,surnom2");
-                    allAnswers.add("ADD:nom:surnom");
-                    allAnswers.add("ADD:nom");
-                } else {
-                    if (c.getCommandWord().equals("VIEW")) {
-                        List<String> arg = ((ViewCommand) c).getArgumentsConnus();
-                        int j;
-                        for (j = 0; j < arg.size(); ++j) {
-                            allAnswers.add("VIEW:" + arg.get(j).toLowerCase());
-                        }
-                    }
-                    allAnswers.add(commandes.get(i).getCommandWord());
-                }
-            }*/
             for(Command cmd : commandes) {
                 for (String str : cmd.getAllSyntaxes()) {
                     allAnswers.add(str);
@@ -58,6 +43,10 @@ public class HelpCommand extends Command{
         }
     }
 
+    /**
+     * return all the syntaxes available for a help request
+     * @return
+     */
     @Override
     public List<String> getAllSyntaxes(){
         List<String> allSyntaxes = new ArrayList<>();

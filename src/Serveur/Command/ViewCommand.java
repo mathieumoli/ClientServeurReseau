@@ -17,6 +17,13 @@ public class ViewCommand extends Command{
         super("VIEW", new ArrayList<>());
     }
 
+    /**
+     * process executed when the client send a view command
+     * @param data
+     * @param answer
+     * @param parser
+     * @return
+     */
     @Override
     public boolean use(ChartDataBase data, StringBuffer answer, Parser parser){
         List<String> allAnswers = new ArrayList<>();
@@ -48,6 +55,10 @@ public class ViewCommand extends Command{
         return argumentsConnus;
     }
 
+    /**
+     * return all the syntaxes available for a view request
+     * @return
+     */
     @Override
     public List<String> getAllSyntaxes() {
         List<String> allSyntaxes = new ArrayList<>();

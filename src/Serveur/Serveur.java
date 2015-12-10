@@ -32,25 +32,21 @@ public class Serveur {
         }
     }
 
-    public ServerSocket getServerSocket() {
-        return serverSocket;
-    }
-
-    public void setServerSocket(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
-    }
-
+    /**
+     * infinite loop and create a new thread for each new client
+     */
     private void boucleAttente(){
-            try {
-                while(true){
-                    new Traitement(serverSocket.accept()).start();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            while(true){
+                new Traitement(serverSocket.accept()).start();
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    //inner class
     private class Traitement extends Thread {
         private Socket clientSocket;
 
@@ -70,7 +66,6 @@ public class Serveur {
          */
         public void run(){
             String messageClient ="";
-            System.out.println(messenger);
             messenger.sendMessage("Vous êtes connecté au serveur ! Envoyez votre premiere requête");
             //Communication
             boolean finished = false;
@@ -78,7 +73,6 @@ public class Serveur {
             while ((! finished)) {
                 answer = new StringBuffer();
                 messageClient = messenger.readMessage();
-                System.out.println("requete : " + messageClient);
                 //si le client quitte sans prévenir
                 if (messageClient == null) {
                     break;
@@ -98,7 +92,7 @@ public class Serveur {
                     //On envoie le message au client
                     messenger.sendMessage(answer.toString());
                 }
-                datas.printDatas();
+                //datas.printDatas();
             }
         }
 
@@ -128,7 +122,6 @@ public class Serveur {
          */
         private boolean traiterCommande(Command cmd, StringBuffer answer, Parser parser) throws UnknownCmdException{
             Command usableCommand = getUsableCommand(cmd);
-            System.out.println(usableCommand);
             if(usableCommand == null) {
                 throw new UnknownCmdException();
             }

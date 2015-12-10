@@ -13,6 +13,13 @@ public class CountCommand extends Command {
 
     public CountCommand() { super("COUNT", new ArrayList<>());}
 
+    /**
+     * process executed when the client send a count command
+     * @param data
+     * @param answer
+     * @param parser
+     * @return
+     */
     @Override
     public boolean use(ChartDataBase data, StringBuffer answer, Parser parser) {
 
@@ -28,6 +35,10 @@ public class CountCommand extends Command {
         return false;
     }
 
+    /**
+     * return all the syntaxes available for a count request
+     * @return
+     */
     @Override
     public List<String> getAllSyntaxes(){
         List<String> allSyntaxes = new ArrayList<>();

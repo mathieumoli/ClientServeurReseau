@@ -19,6 +19,11 @@ public class Command {
         this.arguments = arguments;
     }
 
+    /**
+     * check if the Command in param and this have the same commandWord
+     * @param cmd
+     * @return
+     */
     public boolean hasSameCommandWord(Command cmd){
         return this.commandWord.toUpperCase().equals(cmd.getCommandWord());
     }
@@ -35,6 +40,10 @@ public class Command {
         this.arguments = args;
     }
 
+    /**
+     * return the arguments of the command in touppercase
+     * @return
+     */
     public List<String> getArguments() {
         List<String> args = new ArrayList<>();
         for(int i = 0 ; i < arguments.size() ; ++i){

@@ -28,6 +28,9 @@ public class Client {
         }
     }
 
+    /**
+     * client with standart input to write requests
+     */
     public void process(){
         String messageEnvoye="";
         try {
@@ -35,7 +38,6 @@ public class Client {
             while(!messageEnvoye.toUpperCase().equals("QUIT;")){
                 System.out.printf("Ecrire une requête et appuyer sur ENTER\n");
                 messageEnvoye=sc.nextLine();
-                System.out.println(messageEnvoye);
                 out.write(messageEnvoye);
                 out.newLine();
                 out.flush();
@@ -47,21 +49,27 @@ public class Client {
         }
     }
 
-    public void processWithOneRequest(String name){
-        String messageEnvoye = "add:" + name + ";";
+    /**
+     * Just send the request in parameter
+     * @param name
+     * @param req
+     */
+    public void processWithOneRequest(String req, String name){
+        String messageEnvoye = req + ":" + name + ";";
         try {
-            //System.out.println(in.readLine());
             in.readLine();
             out.write(messageEnvoye);
             out.newLine();
             out.flush();
-            //System.out.println(in.readLine());
             in.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * sent a request count
+     */
     public void countDB(){
         String messageEnvoye = "count;";
         try {
@@ -76,6 +84,9 @@ public class Client {
         }
     }
 
+    /**
+     * close the connection with the server
+     */
     private void endConnection(){
         sc.close();
         try {
