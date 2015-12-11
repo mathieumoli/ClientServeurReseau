@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by user on 09/12/15.
+ * CountCommand class (Mr Litovsky request)
  */
 public class CountCommand extends Command {
 

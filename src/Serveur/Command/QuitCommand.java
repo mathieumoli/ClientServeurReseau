@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by user on 13/11/15.
+ * QuitCommand class
  */
 public class QuitCommand extends Command {
 

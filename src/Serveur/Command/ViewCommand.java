@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by user on 13/11/15.
+ * ViewCommand class
  */
 public class ViewCommand extends Command{
 

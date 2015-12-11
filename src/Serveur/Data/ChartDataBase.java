@@ -4,6 +4,7 @@ import java.util.*;
 
 /**
  * Created by user on 13/11/15.
+ * CharDataBase Class
  */
 public class ChartDataBase {
     private HashMap<String, HashSet<String>> mapNicknames;

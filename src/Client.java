@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 /**
  * Created by Molinengo/Soumille on 04/11/15.
+ * Client which will be connected to our server
  */
 public class Client {
     private Socket nameSocket;

@@ -4,6 +4,7 @@ import Serveur.Command.Command;
 
 /**
  * Created by user on 16/11/15.
+ * SyntaxeException class
  */
 public class SyntaxeException extends Exception {
     private Command cmdInError;

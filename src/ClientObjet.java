@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 /**
  * Created by user on 27/11/15.
+ * Client which must be connected to the Gatien's server
  */
 public class ClientObjet {
     private Socket nameSocket;

@@ -29,6 +29,7 @@ public class Parser {
         List<String> lStrReq = new LinkedList<String>(Arrays.asList(reqTrim.split(":")));
         String firstWord = lStrReq.get(0);
         lStrReq.remove(0);
+
         return new Command(firstWord, lStrReq);
     }
 

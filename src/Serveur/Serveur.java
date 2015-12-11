@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Created by Molinengo/Soumille on 04/11/15.
+ * Serveur Class
  */
 public class Serveur {
 

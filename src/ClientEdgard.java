@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 /**
  * Created by user on 25/11/15.
+ * Client which will be connected to Edgard's server
  */
 public class ClientEdgard {
     private Socket nameSocket;

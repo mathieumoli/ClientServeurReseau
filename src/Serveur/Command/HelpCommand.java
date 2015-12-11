@@ -10,6 +10,7 @@ import Serveur.Serveur;
 
 /**
  * Created by Molinengo/Soumille on 04/11/15.
+ * HelpCommand class (Mr Litovsky request)
  */
 public class HelpCommand extends Command{
 
